@@ -133,6 +133,14 @@ class _ConcentrationPageState extends State<ConcentrationPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Text(
+              isConcentrating ? '집중중' : '집중',
+              style: TextStyle(
+                  fontSize: 70,
+                  color: Colors.white,
+                  fontFamily: 'ShillaCulture'), // 폰트 스타일 추가
+            ),
+            SizedBox(height: 30),
             RichText(
               text: TextSpan(
                 style: TextStyle(fontSize: 48, color: Colors.white),
@@ -153,7 +161,7 @@ class _ConcentrationPageState extends State<ConcentrationPage> {
             GestureDetector(
               onTap: toggleConcentration,
               child: Icon(
-                Icons.power_settings_new,
+                Icons.whatshot, // 불 아이콘
                 size: 150,
                 color: isConcentrating ? Colors.red : Colors.white,
               ),
