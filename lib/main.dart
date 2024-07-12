@@ -13,6 +13,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
         brightness: Brightness.dark,
+        fontFamily: 'ShillaCulture',
       ),
       home: SplashScreen(),
     );
@@ -28,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration(seconds: 3), () {
+    Future.delayed(Duration(seconds: 1), () {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => ConcentrationPage()),
@@ -62,6 +63,30 @@ class _ConcentrationPageState extends State<ConcentrationPage> {
   DateTime? startTime;
   Duration elapsedTime = Duration.zero;
   Timer? timer;
+  Timer? midnightTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    scheduleMidnightReset();
+  }
+
+  void scheduleMidnightReset() {
+    DateTime now = DateTime.now();
+    DateTime midnight = DateTime(now.year, now.month, now.day + 1);
+    Duration timeUntilMidnight = midnight.difference(now);
+
+    midnightTimer = Timer(timeUntilMidnight, resetAtMidnight);
+  }
+
+  void resetAtMidnight() {
+    setState(() {
+      isConcentrating = false;
+      startTime = null;
+      elapsedTime = Duration.zero;
+    });
+    scheduleMidnightReset();
+  }
 
   void toggleConcentration() {
     setState(() {
@@ -95,6 +120,7 @@ class _ConcentrationPageState extends State<ConcentrationPage> {
   @override
   void dispose() {
     timer?.cancel();
+    midnightTimer?.cancel();
     super.dispose();
   }
 
@@ -112,11 +138,13 @@ class _ConcentrationPageState extends State<ConcentrationPage> {
                 style: TextStyle(fontSize: 48, color: Colors.white),
                 children: <TextSpan>[
                   TextSpan(
-                      text:
-                          '${timeParts[0]} : ${timeParts[1]} : ${timeParts[2]}'),
+                    text: '${timeParts[0]} : ${timeParts[1]} : ${timeParts[2]}',
+                    style: TextStyle(fontFamily: 'ShillaCulture'), // 폰트 스타일 추가
+                  ),
                   TextSpan(
                     text: ' : ${timeParts[3]}',
-                    style: TextStyle(fontSize: 24),
+                    style: TextStyle(
+                        fontSize: 24, fontFamily: 'ShillaCulture'), // 폰트 스타일 추가
                   ),
                 ],
               ),
