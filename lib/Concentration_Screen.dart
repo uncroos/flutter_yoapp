@@ -103,50 +103,116 @@ class _ConcentrationPageState extends State<ConcentrationPage> {
   Widget build(BuildContext context) {
     String time = getConcentrationTime();
     List<String> timeParts = time.split(':');
-    return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              isConcentrating ? '집중중' : '집중',
-              style: TextStyle(
-                fontSize: 48,
-                color: Colors.white,
-                fontFamily: 'ShillaCulture', // 폰트 스타일 추가
+
+    return WillPopScope(
+      onWillPop: () async {
+        if (isConcentrating) {
+          showConcentrationAlert();
+          return false; // Prevent back navigation
+        }
+        return true; // Allow back navigation
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              if (!isConcentrating) {
+                navigateBack();
+              } else {
+                showConcentrationAlert();
+              }
+            },
+          ),
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                isConcentrating ? '집중중' : '집중',
+                style: TextStyle(
+                  fontSize: 48,
+                  color: Colors.white,
+                  fontFamily: 'ShillaCulture', // 폰트 스타일 추가
+                ),
               ),
-            ),
-            SizedBox(height: 20),
-            RichText(
-              text: TextSpan(
-                style: TextStyle(fontSize: 48, color: Colors.white),
-                children: <TextSpan>[
-                  TextSpan(
-                    text: '${timeParts[0]} : ${timeParts[1]} : ${timeParts[2]}',
-                    style: TextStyle(fontFamily: 'ShillaCulture'), // 폰트 스타일 추가
-                  ),
-                  TextSpan(
-                    text: ' : ${timeParts[3]}',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontFamily: 'ShillaCulture', // 폰트 스타일 추가
+              SizedBox(height: 20),
+              RichText(
+                text: TextSpan(
+                  style: TextStyle(fontSize: 48, color: Colors.white),
+                  children: <TextSpan>[
+                    TextSpan(
+                      text:
+                          '${timeParts[0]} : ${timeParts[1]} : ${timeParts[2]}',
+                      style:
+                          TextStyle(fontFamily: 'ShillaCulture'), // 폰트 스타일 추가
                     ),
-                  ),
-                ],
+                    TextSpan(
+                      text: ' : ${timeParts[3]}',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontFamily: 'ShillaCulture', // 폰트 스타일 추가
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-            SizedBox(height: 40),
-            GestureDetector(
-              onTap: toggleConcentration,
-              child: Icon(
-                Icons.whatshot, // 불 아이콘
-                size: 150,
-                color: isConcentrating ? Colors.red : Colors.white,
+              SizedBox(height: 40),
+              GestureDetector(
+                onTap: toggleConcentration,
+                child: Icon(
+                  Icons.whatshot, // 불 아이콘
+                  size: 150,
+                  color: isConcentrating ? Colors.red : Colors.white,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  void showConcentrationAlert() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('집중 중'),
+          content: Text('현재 집중 중입니다. 시간을 멈추시겠습니까?'),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                '아니오',
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text(
+                '예',
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () {
+                setState(() {
+                  elapsedTime += DateTime.now().difference(startTime!);
+                  isConcentrating = false;
+                  timer?.cancel();
+                });
+                saveConcentrationState();
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void navigateBack() {
+    Navigator.pop(context);
   }
 }
