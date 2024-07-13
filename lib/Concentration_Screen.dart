@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class ConcentrationPage extends StatefulWidget {
   @override
@@ -13,6 +14,8 @@ class _ConcentrationPageState extends State<ConcentrationPage> {
   Duration elapsedTime = Duration.zero;
   Timer? timer;
   Timer? midnightTimer;
+
+  final player = AudioPlayer();
 
   @override
   void initState() {
@@ -61,12 +64,13 @@ class _ConcentrationPageState extends State<ConcentrationPage> {
     scheduleMidnightReset();
   }
 
-  void toggleConcentration() {
+  void toggleConcentration() async {
     setState(() {
       isConcentrating = !isConcentrating;
       if (isConcentrating) {
         startTime = DateTime.now();
         startTimer();
+        player.play(AssetSource('audios/fin.wav')); // 시작 시 효과음 재생
       } else {
         elapsedTime += DateTime.now().difference(startTime!);
         timer?.cancel();
@@ -96,6 +100,7 @@ class _ConcentrationPageState extends State<ConcentrationPage> {
     timer?.cancel();
     midnightTimer?.cancel();
     saveConcentrationState();
+    player.dispose(); // AudioPlayer 객체 해제
     super.dispose();
   }
 
@@ -192,10 +197,7 @@ class _ConcentrationPageState extends State<ConcentrationPage> {
               },
             ),
             TextButton(
-              child: Text(
-                '예',
-                style: TextStyle(color: Colors.white),
-              ),
+              child: Text('예'),
               onPressed: () {
                 setState(() {
                   elapsedTime += DateTime.now().difference(startTime!);
