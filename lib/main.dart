@@ -13,40 +13,160 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
         brightness: Brightness.dark,
-        fontFamily: 'ShillaCulture',
       ),
-      home: SplashScreen(),
+      home: MainPage(),
     );
   }
 }
 
-class SplashScreen extends StatefulWidget {
-  @override
-  _SplashScreenState createState() => _SplashScreenState();
-}
-
-class _SplashScreenState extends State<SplashScreen> {
-  @override
-  void initState() {
-    super.initState();
-    Future.delayed(Duration(seconds: 3), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => ConcentrationPage()),
-      );
-    });
-  }
-
+class MainPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: Center(
-        child: Image.asset(
-          'assets/images/logo.png', // 로고 이미지로 교체하세요
-          fit: BoxFit.contain,
-          width: double.infinity,
-          height: double.infinity,
+      appBar: AppBar(
+        title: Text(
+          'An4Days',
+          style: TextStyle(
+            fontSize: 40,
+          ),
+        ),
+        backgroundColor: Colors.black,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 20),
+              Text(
+                '오늘의 일정',
+                style: TextStyle(fontSize: 24, color: Colors.white),
+              ),
+              SizedBox(height: 10),
+              Container(
+                padding: EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.grey[850],
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('• Python 수행', style: TextStyle(fontSize: 18)),
+                    Text('• SPAM 일정', style: TextStyle(fontSize: 18)),
+                    Text('• 4시 ~ 6시 커피챗', style: TextStyle(fontSize: 18)),
+                  ],
+                ),
+              ),
+              SizedBox(height: 20),
+              Text(
+                '집중',
+                style: TextStyle(fontSize: 24, color: Colors.white),
+              ),
+              SizedBox(height: 10),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ConcentrationPage()),
+                  );
+                },
+                child: Container(
+                  padding: EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.grey[850],
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Center(
+                    child: Text(
+                      '집중딱',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              Text(
+                'YO-PT',
+                style: TextStyle(fontSize: 24, color: Colors.white),
+              ),
+              SizedBox(height: 10),
+              Container(
+                padding: EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.grey[850],
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Icon(Icons.cloud, size: 50),
+                    ElevatedButton(
+                      onPressed: () {},
+                      child: Text('바로가기'),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 20),
+              Text(
+                '달력',
+                style: TextStyle(fontSize: 24, color: Colors.white),
+              ),
+              SizedBox(height: 10),
+              Container(
+                padding: EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.grey[850],
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '2024년 6월',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      '일 월 화 수 목 금 토',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    GridView.builder(
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 7,
+                        mainAxisSpacing: 4,
+                        crossAxisSpacing: 4,
+                      ),
+                      itemBuilder: (context, index) {
+                        return Center(child: Text('26'));
+                      },
+                      itemCount: 35,
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '느긋하게 일정 확인하러 가자',
+                          style: TextStyle(fontSize: 18),
+                        ),
+                        ElevatedButton(
+                          onPressed: () {},
+                          child: Text('바로가기'),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -129,6 +249,7 @@ class _ConcentrationPageState extends State<ConcentrationPage> {
     String time = getConcentrationTime();
     List<String> timeParts = time.split(':');
     return Scaffold(
+      backgroundColor: Colors.black,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -136,11 +257,12 @@ class _ConcentrationPageState extends State<ConcentrationPage> {
             Text(
               isConcentrating ? '집중중' : '집중',
               style: TextStyle(
-                  fontSize: 70,
-                  color: Colors.white,
-                  fontFamily: 'ShillaCulture'), // 폰트 스타일 추가
+                fontSize: 48,
+                color: Colors.white,
+                fontFamily: 'ShillaCulture', // 폰트 스타일 추가
+              ),
             ),
-            SizedBox(height: 30),
+            SizedBox(height: 20),
             RichText(
               text: TextSpan(
                 style: TextStyle(fontSize: 48, color: Colors.white),
@@ -152,7 +274,9 @@ class _ConcentrationPageState extends State<ConcentrationPage> {
                   TextSpan(
                     text: ' : ${timeParts[3]}',
                     style: TextStyle(
-                        fontSize: 24, fontFamily: 'ShillaCulture'), // 폰트 스타일 추가
+                      fontSize: 24,
+                      fontFamily: 'ShillaCulture', // 폰트 스타일 추가
+                    ),
                   ),
                 ],
               ),
