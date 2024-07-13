@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'Concentration_screen.dart'; // Import the new file
+import 'package:flutter_yoapp/chat_screen.dart';
+import 'Concentration_screen.dart';
+import 'Splash_screen.dart'; // 새로 추가한 파일을 임포트합니다.
 
 void main() {
   runApp(MyApp());
@@ -14,7 +16,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         brightness: Brightness.dark,
       ),
-      home: MainPage(),
+      home: SplashScreen(), // 시작 화면을 SplashScreen으로 변경합니다.
     );
   }
 }
@@ -107,7 +109,12 @@ class MainPage extends StatelessWidget {
                   children: [
                     Icon(Icons.cloud_outlined, size: 100),
                     GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => ChatScreen()),
+                        );
+                      },
                       child: Container(
                         padding: EdgeInsets.symmetric(
                           vertical: 12,
