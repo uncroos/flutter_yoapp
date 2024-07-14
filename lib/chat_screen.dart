@@ -68,8 +68,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
   Widget _buildTextInput() {
     return Container(
-      color: Colors.grey[200],
-      padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+      color: Colors.black,
+      padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
       child: Row(
         children: <Widget>[
           Expanded(
@@ -77,13 +77,20 @@ class _ChatScreenState extends State<ChatScreen> {
               controller: _textController,
               decoration: InputDecoration(
                 hintText: '메시지를 입력하세요',
+                hintStyle: TextStyle(color: Colors.white),
                 border: InputBorder.none,
               ),
+              style: TextStyle(color: Colors.white),
             ),
           ),
           IconButton(
-            icon: Icon(Icons.send),
-            onPressed: () => _sendMessage(_textController.text),
+            icon: Icon(Icons.send, color: Colors.white),
+            onPressed: () {
+              String text = _textController.text.trim();
+              if (text.isNotEmpty) {
+                _sendMessage(text);
+              }
+            },
           ),
         ],
       ),
@@ -110,7 +117,7 @@ class ChatBubble extends StatelessWidget {
       padding: EdgeInsets.all(12.0),
       margin: EdgeInsets.symmetric(vertical: 4.0),
       decoration: BoxDecoration(
-        color: isUser ? Colors.pink : Colors.grey[300],
+        color: isUser ? Color.fromARGB(255, 134, 134, 134) : Colors.grey[300],
         borderRadius: BorderRadius.circular(16.0),
       ),
       child: Text(

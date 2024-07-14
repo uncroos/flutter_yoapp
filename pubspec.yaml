@@ -15,6 +15,9 @@ dependencies:
   audioplayers: ^6.0.0
   http: ^0.13.3
   flutter_dotenv: ^5.1.0
+  google_sign_in: ^5.4.2
+  googleapis: ^10.0.0
+  google_generative_ai: ^0.0.1-dev
 
 dev_dependencies:
   flutter_test:
@@ -26,6 +29,7 @@ flutter:
   assets:
     - assets/audios/fin.wav
     - assets/images/
+    - assets/config/
 
   fonts:
     - family: ShillaCulture
